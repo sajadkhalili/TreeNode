@@ -34,20 +34,32 @@ namespace ConsoleApp1
             return comments;
         }
 
-        public List<Node> GetParents(int? id, List<Node> comments, List<Node> data)
+        public List<Node> GetParentsWithSelf(int? id, List<Node> comments, List<Node> data)
         {
             var node = data.Single(x => x.Id == id);
             comments.Add(node);
             if (node.ParentId == 0)
                 return comments;
-            GetParents(node.ParentId, comments, data);
+            GetParentsWithSelf(node.ParentId, comments, data);
 
             return comments;
 
         }
 
 
+        public List<Node> GetParents(int? id, List<Node> comments, List<Node> data)
+        {
+            var node = data.Single(x => x.Id == id);
+           
+            if (node.ParentId == 0)
+                return comments;
+            var parent = data.Single(x => x.Id == node.ParentId);
+            comments.Add(parent);
+            GetParents(node.ParentId, comments, data);
 
+            return comments;
+
+        }
         public List<Node> GetChildren2(int parentId, List<Node> comments)
         {
             return Nodes
